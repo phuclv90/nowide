@@ -15,6 +15,9 @@
 #include <streambuf>
 #include <stdio.h>
 
+//#define BOOST_NOWIDE_DEBUG_FILEBUF
+//#include <iostream>
+
 #ifdef BOOST_MSVC
 #  pragma warning(push)
 #  pragma warning(disable : 4996 4244 4800)
@@ -49,7 +52,7 @@ namespace nowide {
         /// Creates new filebuf
         ///
         basic_filebuf() : 
-            buffer_size_(4),
+            buffer_size_(BUFSIZ),
             buffer_(0),
             file_(0),
             own_(true),
@@ -105,6 +108,7 @@ namespace nowide {
                 return 0;
             }
             file_ = f;
+            //setvbuf(file_,NULL,_IONBF,0);
             return this;
         }
         ///
@@ -257,13 +261,14 @@ namespace nowide {
                 }
                 last_char_ = c;
                 setg(&last_char_,&last_char_,&last_char_ + 1);
-                return c;
             }
-            make_buffer();
-            size_t n = ::fread(buffer_,1,buffer_size_,file_);
-            setg(buffer_,buffer_,buffer_+n);
-            if(n == 0)
-                return EOF;
+            else {
+                make_buffer();
+                size_t n = ::fread(buffer_,1,buffer_size_,file_);
+                setg(buffer_,buffer_,buffer_+n);
+                if(n == 0)
+                    return EOF;
+            }
             return std::char_traits<char>::to_int_type(*gptr());
         }
 
@@ -391,6 +396,7 @@ namespace nowide {
         char last_char_;
         std::ios::openmode mode_;
     };
+    
     
     ///
     /// \brief Convinience typedef

@@ -30,12 +30,18 @@ endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_FLAGS}")
 
+find_library(BOOST_FILESYSTEM boost_filesystem)
+find_library(BOOST_SYSTEM boost_system)
+
+
 set(NOWIDE_TESTS
     test_convert
     test_stdio
     test_fstream
     test_codecvt
+    test_fs
     )
+
 
 foreach(TEST ${NOWIDE_TESTS})
     add_executable(${TEST} test/${TEST}.cpp)
@@ -45,6 +51,9 @@ foreach(TEST ${NOWIDE_TESTS})
        add_test(${TEST} ${TEST})
     endif()
 endforeach()
+
+target_link_libraries(test_fs ${BOOST_FILESYSTEM} ${BOOST_SYSTEM})
+target_link_libraries(test_fstream ${BOOST_SYSTEM})
 
 add_library(nowide SHARED src/iostream.cpp)
 set_target_properties(nowide	PROPERTIES VERSION 0.0.0 SOVERSION 0)
