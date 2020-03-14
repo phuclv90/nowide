@@ -33,11 +33,11 @@ namespace nowide {
 #else
 
     ///
-    /// \brief args is a class that fixes standard main() function arguments and changes them to UTF-8 under
+    /// \brief args is a class that fixes standard \c main() function arguments and changes them to UTF-8 under
     /// Microsoft Windows.
     ///
     /// The class uses \c GetCommandLineW(), \c CommandLineToArgvW() and \c GetEnvironmentStringsW()
-    /// in order to obtain the information. It does not relate to actual values of argc,argv and env
+    /// in order to obtain the information. It does not relate to actual values of argc, argv and env
     /// under Windows.
     ///
     /// It restores the original values in its destructor
@@ -69,7 +69,7 @@ namespace nowide {
             fix_env(env);
         }
         ///
-        /// Restore original argc,argv,env values, if changed
+        /// Restore original argc, argv, env values, if changed
         ///
         ~args()
         {
